@@ -1,20 +1,26 @@
-# Desincronización de Frecuencias en Series Temporales: Análisis Comparativo de Métodos de Interpolación y Suavizado
----
-## Resumen (Abstract)
+# Desincronización de Frecuencias en Series Temporales Demográficas: Comparación de Métodos de Interpolación Mensual a partir de Datos Anuales
 
-El presente informe técnico aborda un desafío común en el análisis de datos socioeconómicos y demográficos: la integración de registros mensuales de alta frecuencia con proyecciones poblacionales de publicación anual. 
-
-A tal fin, se evalúan tres enfoques metodológicos: **Interpolación Lineal**, **Tasa Intercensal Exponencial** y **Promedio Móvil Centrado**. El estudio utiliza como base las estadísticas oficiales publicadas por el [Banco Mundial para el período 1960-2024](https://datos.bancomundial.org/indicador/SP.POP.TOTL?locations=AR), complementadas con los datos provisorios proyectados para el año 2025 extraídos de [Worldometers](https://www.worldometers.info/es/poblacion-mundial/poblacion-argentina/).
-
-El objetivo principal es cuantificar la **"materialidad"** del error de estimación derivado de la elección del denominador, determinar si la aplicación (o ausencia) de estos métodos puede generar desvíos que conduzcan a un análisis erróneo de la realidad social, y sugerir un estándar de trabajo que garantice la auditabilidad y la suavidad de las series resultantes, eliminando los "saltos artificiales" que suelen ocurrir en los cierres de cada período anual.
+**Autor:** [Martin Nicolas Serafini](https://www.linkedin.com/in/martin-nicolas-serafini-05224923b/)
 
 ---
+## Abstract
+
+El presente informe técnico aborda un problema recurrente en el análisis de series temporales socioeconómicas: la integración de datos de distinta frecuencia, específicamente registros mensuales con estimaciones poblacionales de periodicidad anual.
+
+Se comparan tres enfoques metodológicos para la desagregación temporal de la población: **Interpolación Lineal**, **Interpolación Exponencial basada en tasa intercensal** y **Suavizado mediante Promedio Móvil Centrado**. El análisis se basa en datos oficiales del Banco Mundial para el período 1960–2024, complementados con estimaciones provisorias para 2025.
+
+La contribución principal del trabajo consiste en evaluar el impacto cuantitativo de estos métodos sobre indicadores derivados, introduciendo el concepto de **materialidad del error de estimación** como criterio de validación. 
+
+Los resultados permiten identificar diferencias  entre enfoques y sugerir lineamientos metodológicos orientados a mejorar la consistencia, suavidad y auditabilidad de las series temporales utilizadas en análisis socioeconómicos.
+
 ## 1. Introducción
 
-El presente análisis surge a partir del procesamiento y estudio de los datos oficiales publicados por la **Administración Nacional de la Seguridad Social (ANSES)**, específicamente aquellos referidos a la cobertura de la Asignación Universal por Hijo (AUH) y la Asignación por Embarazo para Protección Social (AxE), detallados en el [Boletín de Asignaciones de Octubre 2025](https://www.anses.gob.ar/estudiosyestadisticas/boletin-asignaciones-para-proteccion-social-octubre-2025).
+El análisis de indicadores socioeconómicos frecuentemente requiere la integración de fuentes de datos con distinta periodicidad. Un caso representativo es la combinación de registros administrativos mensuales con estimaciones poblacionales disponibles únicamente en frecuencia anual.
 
-En el proceso de enriquecer este dataset mediante el cálculo de indicadores propios —como variaciones intermensuales y actualización de importes reales—, se identificó la relevancia de construir un **Índice de Minoridad**. Este indicador tiene como objetivo medir la tasa de cobertura de las asignaciones sobre el total de la población objetivo en Argentina. Para su construcción, se utilizó la información demográfica anual emitida por el **Banco Mundial**, la cual presenta una periodicidad de cierre a diciembre de cada año.
+Este trabajo surge a partir del estudio de datos publicados por la Administración Nacional de la Seguridad Social (ANSES), en particular aquellos vinculados a la cobertura de la Asignación Universal por Hijo (AUH) y la Asignación por Embarazo para Protección Social (AxE). En este contexto, la utilización de un denominador poblacional adecuado resulta de utilidad para la correcta interpretación de los indicadores.
 
-Al intentar cruzar ambas fuentes, se presentó el desafío técnico de la desincronización de frecuencias: datos administrativos con granularidad mensual frente a denominadores poblacionales con actualización anual. Una alternativa simplista hubiera sido replicar el valor anual de población en cada uno de los doce meses del ejercicio; sin embargo, se consideró imperativo evaluar métodos alternativos de interpolación para dotar al índice de una mayor precisión técnica. 
+El principal desafío técnico radica en la **desincronización de frecuencias**, donde la población total —publicada anualmente por el Banco Mundial— debe ser adaptada a una escala mensual. Una aproximación simplificada consiste en replicar el valor anual en cada mes; sin embargo, este enfoque introduce discontinuidades artificiales y puede distorsionar el análisis de tendencias.
 
-En última instancia, la solidez de la arquitectura de los datos redunda en indicadores más robustos, lo que permite un análisis más exacto de la realidad social y minimiza las distorsiones estadísticas en las conclusiones de gestión.
+Frente a este problema, el presente trabajo evalúa distintos métodos de interpolación y suavizado, con el objetivo de construir series mensuales consistentes y comparables. En particular, se propone analizar el impacto de cada metodología sobre los indicadores derivados, introduciendo el concepto de **materialidad del error** como criterio para determinar la relevancia práctica de las diferencias observadas.
+
+La contribución pretendida al preparar el presente estudio radica en la comparación sistemática de estos enfoques y en la propuesta de un criterio metodológico que permita mejorar la calidad analítica y la auditabilidad de las series utilizadas en estudios socioeconómicos.
