@@ -154,43 +154,35 @@ En este contexto, el presente trabajo no busca reestimar la serie poblacional an
 
 En esta sección se presentan los métodos utilizados para la desagregación temporal de la serie anual de población a frecuencia mensual. Cada enfoque implica distintos supuestos sobre la dinámica intra-anual del fenómeno y genera resultados con propiedades diferenciadas en términos de consistencia temporal y precisión.
 
----
-
 ### 5.1 Interpolación lineal
-
 #### Definición
-
 La interpolación lineal asume que la población evoluciona a una tasa constante entre dos observaciones anuales consecutivas. Bajo este supuesto, la variación total entre años se distribuye uniformemente entre los 12 meses.
 
-:contentReference[oaicite:0]{index=0}
+$$
+P_{t,m} = P_t + \frac{m}{12}\left(P_{t+1} - P_t\right)
+$$
 
 Donde:
 
-- \(P_t\): población en el año \(t\)  
-- \(P_{t+1}\): población en el año siguiente  
-- \(P_{t,m}\): población estimada en el mes \(m\) del año \(t\)  
-
----
+$$
+\begin{aligned}
+m        &:\ \text{mes dentro del año, con } m = 0,1,\dots,12 \\
+P_t      &:\ \text{población en el año } t \\
+P_{t+1}  &:\ \text{población en el año siguiente} \\
+P_{t,m}  &:\ \text{población estimada en el mes } m \text{ del año } t
+\end{aligned}
+$$
 
 #### Supuestos
-
 - Crecimiento poblacional lineal dentro del año  
 - Distribución uniforme del cambio anual  
 - Ausencia de variaciones intra-anuales significativas  
-
----
-
 #### Ventajas
-
 - Simplicidad de implementación  
 - Interpretación directa  
 - Garantiza continuidad entre años  
 - Bajo costo computacional  
-
----
-
 #### Limitaciones
-
 - No refleja crecimiento compuesto  
 - Puede generar sesgos si la dinámica es no lineal  
 - No contempla explícitamente la alineación temporal (mid-year)  
@@ -205,20 +197,28 @@ Este método asume que la población crece a una tasa constante en términos rel
 
 Primero se calcula la tasa de crecimiento anual continua:
 
-r_t = ln(P_{t+1} / P_t)
+$$
+r_t = \ln\left(\frac{P_{t+1}}{P_t}\right)
+$$
 
 Luego, la población mensual se estima como:
 
-P_{t,m} = P_t * e^{(r_t * m / 12)},   m = 0,1,...,12
+$$
+P_{t,m} = P_t \cdot e^{\left(\frac{r_t \cdot m}{12}\right)}, \quad m = 0,1,\dots,12
+$$
 
 Donde:
 
-- \(P_t\): población en el año \(t\), utilizada como condición inicial  
-- \(P_{t+1}\): población en el año siguiente  
-- \(r_t\): tasa de crecimiento continua anual, definida como el logaritmo natural del cociente entre poblaciones consecutivas  
-- \(m\): mes dentro del año, con \(m = 0,1,\dots,12\)  
-- \(\frac{m}{12}\): proporción del año transcurrida  
-- \(e\): base del logaritmo natural, que permite modelizar crecimiento exponencial  
+$$
+\begin{aligned}
+P_t      &:\ \text{población en el año } t,\ \text{utilizada como condición inicial} \\
+P_{t+1}  &:\ \text{población en el año siguiente} \\
+r_t      &:\ \text{tasa de crecimiento continua anual} \\
+m        &:\ \text{mes dentro del año, con } m = 0,1,\dots,12 \\
+\frac{m}{12} &:\ \text{proporción del año transcurrida} \\
+e        &:\ \text{base del logaritmo natural, que permite modelizar crecimiento exponencial}
+\end{aligned}
+$$
 
 La expresión \(r_t \cdot \frac{m}{12}\) representa el crecimiento acumulado hasta el mes \(m\) en términos continuos, mientras que la función exponencial transforma dicha tasa en un factor multiplicativo aplicado sobre la población inicial.
 
