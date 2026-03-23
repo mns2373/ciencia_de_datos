@@ -317,4 +317,13 @@ Los métodos presentados responden a distintos supuestos sobre la evolución int
 | Interpolación exponencial      | Interpolación   | Crecimiento porcentual acumulativo       | Más realista, captura crecimiento compuesto            | Más sensible a variaciones entre años                      | Análisis demográficos más precisos        |
 | Promedio móvil centrado        | Suavizado       | Promedio de valores vecinos              | Reduce ruido, mejora estabilidad                       | No genera datos por sí solo, pierde extremos               | Ajuste final de la serie                  |
 
+## 6. Implementación
+### 6.1 Herramientas
+La implementación del presente trabajo se realizó utilizando el lenguaje de programación Python, junto con las siguientes librerías:
+- **Pandas**: manipulación y transformación de datos  
+- **NumPy**: operaciones numéricas y cálculo vectorizado  
+- **Matplotlib / Seaborn** (opcional): visualización de resultados  
+- **Jupyter Notebook / Google Colab**: entorno de desarrollo y documentación del proceso  
+
+Estas herramientas permiten construir un pipeline reproducible, facilitando la trazabilidad y auditabilidad de los resultados obtenidos.
 
