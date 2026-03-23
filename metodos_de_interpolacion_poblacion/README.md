@@ -6,9 +6,9 @@
 ## 1. Abstract
 El presente trabajo aborda el problema de la desincronización de frecuencias en series temporales socioeconómicas, específicamente en la integración de datos mensuales con estimaciones poblacionales anuales. Se utilizan datos de población de la República Argentina provenientes del Banco Mundial para el período 1960–2024, los cuales corresponden a estimaciones de mitad de año (mid-year), lo que introduce una desalineación temporal respecto de series de fin de período.
 
-Sobre esta base, se evalúan distintos métodos de interpolación —Interpolación Lineal, Interpolación Exponencial y Promedio Móvil Centrado— con el objetivo de construir series mensuales consistentes. El análisis se centra en cuantificar el impacto de estas metodologías sobre indicadores derivados, introduciendo el concepto de **materialidad del error de estimación** como criterio de evaluación.
+Sobre esta base, se evalúan distintos enfoques para la construcción de series mensuales —Interpolación Lineal, Interpolación Exponencial y Promedio Móvil Centrado como técnica de suavizado— con el objetivo de construir series mensuales consistentes. El análisis se centra en cuantificar el impacto de estas metodologías sobre indicadores derivados, introduciendo el concepto de materialidad del error de estimación como criterio de evaluación.
 
-Los resultados evidencian que la elección del método de interpolación puede generar diferencias significativas, afectando la interpretación de la dinámica socioeconómica. En consecuencia, se proponen lineamientos metodológicos orientados a mejorar la consistencia, comparabilidad y auditabilidad de las series temporales utilizadas en análisis aplicados.
+Los resultados evidencian que la elección del método de interpolación puede generar diferencias, pudiendo llegar a afectar la interpretación de la dinámica socioeconómica según sea el caso. En consecuencia, se exploran lineamientos metodológicos orientados a mejorar la consistencia, comparabilidad y auditabilidad de las series temporales utilizadas en análisis aplicados.
 
 ---
 ## 2. Introducción
@@ -16,11 +16,12 @@ El análisis de indicadores socioeconómicos frecuentemente requiere la integrac
 
 El presente trabajo surge a partir del estudio de datos publicados por la Administración Nacional de la Seguridad Social (ANSES), en particular aquellos vinculados a la cobertura de la Asignación Universal por Hijo (AUH) y la Asignación por Embarazo para Protección Social (AxE). En este contexto, la correcta especificación del denominador poblacional resulta relevante para la adecuada interpretación de los indicadores que se construyan.
 
-El principal desafío técnico radica en la desincronización de frecuencias, donde la población total —publicada anualmente por el [Banco Mundial](https://datos.bancomundial.org/indicador/SP.POP.TOTL?locations=AR) para el período 1960-2024— debe ser adaptada a una escala mensual. Adicionalmente, dichas estimaciones corresponden a valores de mitad de año (mid-year population), lo que implica que cada observación anual se encuentra centrada aproximadamente en el mes de julio y no representa directamente niveles de población a fin de período.
+El principal desafío técnico radica en la desincronización de frecuencias, donde la población total —publicada anualmente por el Banco Mundial
+ para el período 1960-2024— debe ser adaptada a una escala mensual. Adicionalmente, dichas estimaciones corresponden a valores de mitad de año (mid-year population), lo que implica que cada observación anual se encuentra centrada aproximadamente en el mes de julio y no representa directamente niveles de población a fin de período.
 
 En consecuencia, el problema abordado no se limita a una simple interpolación temporal (desagregación de frecuencia), sino que también involucra una desalineación en la referencia temporal de la serie. Esto introduce un desfase intra-anual que debe ser considerado en la construcción del denominador poblacional. Una aproximación simplificada consiste en replicar el valor anual en cada mes; sin embargo, este enfoque genera discontinuidades artificiales y puede distorsionar el análisis de tendencias, afectando la interpretación de la dinámica bajo análisis.
 
-Frente a este escenario, el presente trabajo evalúa distintos métodos de interpolación y suavizado con el objetivo de construir series mensuales consistentes, comparables y metodológicamente robustas. En particular, se propone analizar el impacto de cada enfoque sobre indicadores derivados, introduciendo el concepto de **materialidad del error de estimación** como criterio para determinar la relevancia práctica de las diferencias observadas.
+Frente a este escenario, el presente trabajo evalúa distintos métodos de interpolación y técnicas de suavizado con el objetivo de construir series mensuales consistentes, comparables y metodológicamente robustas. En particular, se consideran métodos de interpolación para la desagregación temporal y, de manera complementaria, técnicas de suavizado orientadas a mejorar la consistencia de las series resultantes. Asimismo, se propone analizar el impacto de cada enfoque sobre indicadores derivados, introduciendo el concepto de materialidad del error de estimación como criterio para determinar la relevancia práctica de las diferencias observadas.
 
 La contribución del estudio radica en la comparación sistemática de estos métodos y en la formulación de un criterio metodológico orientado a mejorar la calidad analítica, la consistencia temporal y la auditabilidad de las series utilizadas en el análisis de fenómenos socioeconómicos.
 
@@ -151,8 +152,9 @@ En este contexto, el presente trabajo no busca reestimar la serie poblacional an
 
 ---
 ## 5. Metodología
+En esta sección se presentan los métodos utilizados para la desagregación temporal de la serie anual de población a frecuencia mensual, así como una técnica complementaria de suavizado. Cada enfoque implica distintos supuestos sobre la dinámica intra-anual del fenómeno y genera resultados con propiedades diferenciadas en términos de consistencia temporal y precisión.
 
-En esta sección se presentan los métodos utilizados para la desagregación temporal de la serie anual de población a frecuencia mensual. Cada enfoque implica distintos supuestos sobre la dinámica intra-anual del fenómeno y genera resultados con propiedades diferenciadas en términos de consistencia temporal y precisión.
+En particular, se distinguen dos etapas metodológicas: (i) la construcción de la serie mensual mediante métodos de interpolación y (ii) el ajuste de la serie resultante mediante técnicas de suavizado.
 
 ### 5.1 Interpolación lineal
 #### Definición
@@ -167,6 +169,7 @@ Donde:
 $$
 \begin{aligned}
 m        &:\ \text{mes dentro del año, con } m = 0,1,\dots,12 \\
+\frac{m}{12} &:\ \text{proporción del año transcurrida} \\
 P_t      &:\ \text{población en el año } t \\
 P_{t+1}  &:\ \text{población en el año siguiente} \\
 P_{t,m}  &:\ \text{población estimada en el mes } m \text{ del año } t
@@ -174,23 +177,20 @@ P_{t,m}  &:\ \text{población estimada en el mes } m \text{ del año } t
 $$
 
 #### Supuestos
-- Crecimiento poblacional lineal dentro del año  
-- Distribución uniforme del cambio anual  
-- Ausencia de variaciones intra-anuales significativas  
-#### Ventajas
-- Simplicidad de implementación  
-- Interpretación directa  
-- Garantiza continuidad entre años  
-- Bajo costo computacional  
-#### Limitaciones
-- No refleja crecimiento compuesto  
-- Puede generar sesgos si la dinámica es no lineal  
-- No contempla explícitamente la alineación temporal (mid-year)  
+- La población crece de manera constante a lo largo del año  
+- El cambio anual se reparte en partes iguales entre los meses  
 
----
+#### Ventajas
+- Muy fácil de implementar  
+- Fácil de entender e interpretar  
+- Evita saltos bruscos entre años (serie continua)  
+
+#### Limitaciones
+- No representa bien el crecimiento real si este no es constante  
+- Puede introducir pequeños errores en contextos de crecimiento acelerado o desacelerado  
+- No corrige el desfase temporal de los datos (mid-year)  
 
 ### 5.2 Interpolación exponencial (tasa intercensal)
-
 #### Definición
 
 Este método asume que la población crece a una tasa constante en términos relativos (crecimiento exponencial), lo cual resulta consistente con modelos demográficos estándar.
@@ -220,86 +220,101 @@ e        &:\ \text{base del logaritmo natural, que permite modelizar crecimiento
 \end{aligned}
 $$
 
-La expresión \(r_t \cdot \frac{m}{12}\) representa el crecimiento acumulado hasta el mes \(m\) en términos continuos, mientras que la función exponencial transforma dicha tasa en un factor multiplicativo aplicado sobre la población inicial.
+La expresión
 
-Este enfoque garantiza que la serie interpolada preserve los valores anuales originales, cumpliendo que \(P_{t,0} = P_t\) y \(P_{t,12} = P_{t+1}\).
+$$
+r_t \cdot \frac{m}{12}
+$$
 
----
+representa el crecimiento acumulado hasta el mes \( m \) en términos continuos, mientras que la función exponencial transforma dicha tasa en un factor multiplicativo aplicado sobre la población inicial.
+
+Este enfoque garantiza que la serie interpolada preserve los valores anuales originales, cumpliendo que:
+
+$$
+P_{t,0} = P_t
+$$
+
+y
+
+$$
+P_{t,12} = P_{t+1}
+$$
 
 #### Supuestos
-
-- Crecimiento proporcional (exponencial)  
-- Tasa de crecimiento constante dentro del año  
-- Evolución demográfica suave  
-
----
+- La población crece a una tasa constante en términos porcentuales  
+- El crecimiento se acumula mes a mes (no de forma lineal)  
+- La evolución es gradual y sin cambios bruscos  
 
 #### Ventajas
-
-- Mayor realismo demográfico  
-- Captura crecimiento compuesto  
-- Evita subestimaciones en contextos de crecimiento sostenido  
-- Genera trayectorias más naturales  
-
----
+- Representa mejor el crecimiento real de la población  
+- Tiene en cuenta el efecto acumulativo (crecimiento sobre crecimiento)  
+- Genera una evolución más suave y natural que la interpolación lineal  
 
 #### Limitaciones
-
-- Mayor complejidad conceptual  
+- Es un poco más complejo de entender e implementar  
 - Sensible a errores en datos extremos  
-- Puede amplificar variaciones pequeñas  
-- No corrige explícitamente la desalineación temporal  
-
----
+- Puede exagerar pequeñas diferencias entre años  
+- No corrige el desfase temporal de los datos (mid-year)  
 
 ### 5.3 Promedio móvil centrado
-
 #### Definición
+El promedio móvil centrado es un método de suavizado que reduce la variabilidad de corto plazo promediando observaciones adyacentes y no de interpolacion. En este contexto, se aplica sobre una serie mensual previamente interpolada.
 
-El promedio móvil centrado es un método de suavizado que reduce la variabilidad de corto plazo promediando observaciones adyacentes. En este contexto, se aplica sobre una serie mensual previamente interpolada.
+Para una ventana de tamaño \( k = 2h + 1 \), el promedio móvil centrado se define como:
 
-Para una ventana de tamaño k = 2h + 1, el promedio móvil centrado se define como:
+$$
+\tilde{P}_{t,m} = \frac{1}{2h + 1} \sum_{j=-h}^{h} P_{t,m+j}
+$$
 
-P~_{t,m} = (1 / (2h + 1)) * Σ_{j=-h}^{h} P_{t,m+j}
+Donde:
 
-Caso particular (ventana de 3 meses):
+$$
+\begin{aligned}
+\tilde{P}_{t,m} &:\ \text{población suavizada estimada en el mes } m \text{ del año } t \\
+P_{t,m} &:\ \text{población mensual original (interpolada) en el mes } m \text{ del año } t \\
+k &:\ \text{tamaño de la ventana del promedio móvil, con } k = 2h + 1 \\
+h &:\ \text{número de períodos hacia atrás y hacia adelante considerados en el promedio} \\
+j &:\ \text{índice de desplazamiento dentro de la ventana, con } j = -h, \dots, h \\
+\sum_{j=-h}^{h} &:\ \text{operador de sumatoria sobre los valores dentro de la ventana} \\
+\frac{1}{2h+1} &:\ \text{factor de normalización que asegura que el promedio conserve la escala de la serie} \\
+P_{t,m+j} &:\ \text{observaciones vecinas a la posición central } (t,m) \\
+(t,m) &:\ \text{índice temporal compuesto por año } t \text{ y mes } m
+\end{aligned}
+$$
 
+Se recomienda utilizar una ventana de tres meses (\( h = 1 \)) porque la población es una variable que cambia de manera gradual a lo largo del tiempo. En este sentido, no es necesario aplicar un suavizado fuerte. Una ventana más grande podría “aplanar” la serie y ocultar variaciones reales, además de generar cierto retraso en los valores. En cambio, una ventana corta permite suavizar pequeñas irregularidades sin alterar la evolución natural de la población.
 
----
+Caso particular (ventana de 3 meses, \( h = 1 \)):
+
+$$
+\tilde{P}_{t,m} = \frac{P_{t,m-1} + P_{t,m} + P_{t,m+1}}{3}
+$$
 
 #### Supuestos
-
-- La serie presenta ruido o variaciones no estructurales  
-- La tendencia subyacente es suave  
-- Las variaciones de corto plazo no son relevantes  
-
----
+- La serie puede tener pequeñas variaciones que no reflejan cambios reales  
+- La evolución general es suave a lo largo del tiempo  
+- Las fluctuaciones de corto plazo no son relevantes para el análisis  
 
 #### Ventajas
-
-- Reduce ruido y oscilaciones artificiales  
-- Mejora la suavidad de la serie  
-- Incrementa la consistencia temporal  
-- Fácil implementación  
-
----
+- Reduce pequeñas irregularidades en la serie  
+- Genera una evolución más suave y estable  
+- Mejora la consistencia entre períodos  
+- Es simple de aplicar  
 
 #### Limitaciones
-
-- No genera una serie base (requiere interpolación previa)  
-- Introduce pérdida de información en extremos  
-- Puede suavizar en exceso cambios reales  
-- Puede generar rezagos en la serie  
-
----
+- No sirve por sí solo para generar la serie (requiere una interpolación previa)  
+- No permite calcular valores en los extremos de la serie  
+- Puede “aplanar” variaciones reales si se usa en exceso  
+- Puede introducir un leve retraso en los valores  
 
 ### 5.4 Consideraciones generales
 
 Los métodos presentados responden a distintos supuestos sobre la evolución intra-anual de la población. Mientras que la interpolación lineal y exponencial constituyen enfoques de desagregación directa, el promedio móvil centrado actúa como técnica de suavizado complementaria.
 
-La elección del método adecuado dependerá del equilibrio entre:
+| Método                          | Tipo            | Idea principal                          | Ventajas principales                                  | Limitaciones principales                                  | Uso recomendado                          |
+|---------------------------------|-----------------|------------------------------------------|--------------------------------------------------------|------------------------------------------------------------|------------------------------------------|
+| Interpolación lineal           | Interpolación   | Cambio constante en el tiempo            | Simple, clara, continua                                | No refleja crecimiento real no lineal                      | Análisis básicos / aproximaciones rápidas |
+| Interpolación exponencial      | Interpolación   | Crecimiento porcentual acumulativo       | Más realista, captura crecimiento compuesto            | Más sensible a variaciones entre años                      | Análisis demográficos más precisos        |
+| Promedio móvil centrado        | Suavizado       | Promedio de valores vecinos              | Reduce ruido, mejora estabilidad                       | No genera datos por sí solo, pierde extremos               | Ajuste final de la serie                  |
 
-- realismo demográfico  
-- simplicidad operativa  
-- consistencia temporal  
-- impacto sobre indicadores derivados  
+
