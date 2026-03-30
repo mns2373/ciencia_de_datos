@@ -330,42 +330,59 @@ Estas herramientas permiten construir un pipeline reproducible, facilitando la t
 ## 7. Resultados
 ### Comparación entre métodos
 El análisis demuestra que la elección del método de interpolación impacta directamente en la **continuidad analítica** de las series mensuales. Mientras que los métodos puros generan inconsistencias visuales y técnicas, el suavizado actúa como un puente necesario para la interpretación de tendencias de corto plazo.
-* **Interpolación Lineal:** Asume incrementos absolutos constantes, lo que deriva en una tasa porcentual decreciente mes a mes (efecto base) y un salto brusco en los puntos de empalme anual.
-* **Interpolación Exponencial:** Mantiene una tasa de crecimiento constante, siendo más coherente con la naturaleza de los datos demográficos, aunque requiere suavizado para evitar escalones entre años con diferentes ritmos.
-### Visualizaciones de la Dinámica de Tasas
-La aplicación del suavizado mediante promedios móviles centrados ($h=1$) permite una transición armónica que elimina los artefactos matemáticos de los modelos base.
-![Tasa de Crecimiento Mensual Lineal](efecto_suavizado_lineal.png)
-*Figura 1: El suavizado lineal elimina el efecto "serrucho", aunque mantiene la pendiente negativa intra-anual inherente al modelo aritmético.*
-![Tasa de Crecimiento Mensual Exponencial](efecto_suavizado_exponencial.png)
-*Figura 2: El modelo exponencial suavizado preserva la inercia del crecimiento geométrico, limitando los ajustes a las zonas de transición.*
-### Diferencias Cuantitativas
-Al contrastar ambos modelos suavizados, se observa que el exponencial ofrece mayor estabilidad local (mesetas), mientras que el lineal presenta una variación continua.
+### Análisis de Distribución y Sesgo
+Antes de evaluar la suavidad, es imperativo cuantificar la discrepancia entre el modelo Lineal y el Exponencial. El histograma de diferencias revela un sesgo sistemático.
 
-![Comparativa de Tasas Suavizadas](efecto_suavizados.png)
-*Figura 3: Comparativa de estabilidad. El modelo exponencial (violeta) muestra una mayor fidelidad a la tasa constante buscada en demografía.*
+![Distribución de Desviaciones](distribucion_desviaciones.png)
+
+*Figura 1: El histograma muestra que el modelo exponencial tiende a situarse por debajo del lineal en la mayor parte de la serie histórica, con una distribución concentrada en valores de error exiguos.*
+
+### Visualizaciones de la Dinámica de Tasas
+La aplicación del suavizado mediante promedios móviles centrados ($h=1$) permite una transición armónica que elimina los artefactos matemáticos de los modelos base (el efecto "serrucho").
+
+![Tasa de Crecimiento Mensual Lineal](efecto_suavizado_lineal.png)
+
+*Figura 2: El suavizado lineal elimina los ángulos rectos, aunque mantiene la pendiente negativa intra-anual inherente al modelo aritmético.*
+
+![Tasa de Crecimiento Mensual Exponencial](efecto_suavizado_exponencial.png)
+
+*Figura 3: El modelo exponencial suavizado preserva la inercia del crecimiento geométrico, limitando los ajustes a las zonas de transición.*
 
 ## 8. Evaluación del Error / Materialidad
 ### Definición de “Materialidad”
 En este estudio, la materialidad se define como la capacidad de una diferencia metodológica para alterar significativamente un indicador de política social. Trabajando con poblaciones de escala nacional (46M), una diferencia es material si modifica los dígitos significativos de la cobertura prestacional.
-### Métricas de Diferencia
-* **Diferencias Absolutas:** El impacto es prácticamente nulo. En el modelo lineal, el residuo es cero por propiedades del promedio centrado; en el exponencial, la diferencia es de apenas ~1.25 personas sobre el total nacional.
-* **Diferencias Relativas:** El sesgo medio se sitúa en el **-0.0015%**, un valor estadísticamente despreciable para la gestión de políticas públicas.
-![Densidad de Probabilidad del Error](densidad_probabilidad.png)
-*Figura 4: La distribución del error muestra una concentración cercana a la diferencia nula, validando la integridad de los datos para su uso en reportes oficiales.*
+### Métricas de Diferencia y Estacionalidad del Error
+A través de los diagramas de caja (Boxplots), observamos cómo el error no es aleatorio, sino que depende de la distancia al punto de anclaje oficial (Julio).
+
+![Desviación por Metodología y Mes](desviacion_x_metodologia.png)
+
+*Figura 4: Los Boxplots mensuales confirman que el error es nulo en julio y máximo en los meses equidistantes (enero/diciembre), evidenciando el ciclo de la interpolación.*
+### Análisis de Dispersión
+Para validar si el error crece proporcionalmente con el tamaño de la población a lo largo de los 65 años analizados, se cruzó la desviación absoluta contra la media poblacional.
+
+![Desviación vs Media Poblacional](desviacion_vs_media.png)
+
+*Figura 5: El gráfico de dispersión permite visualizar la evolución del error metodológico en relación al crecimiento demográfico total del país.*
 ### Impacto en Indicadores (ej: cobertura AUH)
-Para el cálculo de la "tasa de minoridad" y la cobertura de la **Asignación Universal por Hijo (AUH)**, una desviación de pocas decenas de personas en el denominador es **inmaterial**. La verdadera utilidad del método radica en la **estabilidad de la serie**, evitando "picos" artificiales que podrían interpretarse erróneamente como cambios en la gestión de ANSES.
+* **Diferencias Absolutas:** El impacto es prácticamente nulo. En el modelo lineal, el residuo es cero; en el exponencial, la diferencia es de apenas ~1.25 personas.
+* **Diferencias Relativas:** El sesgo medio se sitúa en el **-0.0015%**, un valor estadísticamente despreciable.
+
+![Densidad de Probabilidad del Error](densidad_probabilidad.png)
+
+*Figura 6: La distribución de densidad (KDE) confirma una concentración extrema cerca del error cero, validando la integridad de los datos para su uso en reportes oficiales.*
 
 ## 9. Discusión
-### Interpretación de resultados
-La pendiente negativa general de las tasas refleja la **transición demográfica avanzada** de Argentina (desaceleración del crecimiento). El suavizado no inventa datos, sino que permite que esta realidad biológica sea legible en una escala mensual sin el ruido de los cierres de ejercicio anclados en julio.
-### Trade-offs: Simplicidad vs. Precisión
-Un hallazgo clave de este informe es que, ante diferencias cuantitativas tan exiguas, entra en juego el criterio de **explicabilidad**:
-* **La ventaja de lo simple:** El método lineal, aunque teóricamente menos "fino", es más fácil de auditar y explicar en entornos administrativos o contables. Si ofrece un resultado idéntico a nivel de indicadores significativos, su simplicidad es un activo valioso.
-* **El rigor del Data Science:** El método exponencial es preferible para modelos predictivos de largo plazo, donde el crecimiento compuesto sí genera distorsiones acumuladas.
-### Advertencia Metodológica: Escenarios Significativos
-Es crucial notar que la "inmaterialidad" hallada aquí es específica para datos demográficos de baja volatilidad. En otros escenarios, la elección del método generaría cambios críticos:
-1.  **Economía y Moneda:** En contextos de alta inflación, la diferencia entre una curva lineal y una exponencial de precios sería masiva y material en pocos meses.
-2.  **Producción Industrial:** En procesos de escalamiento con crecimiento acelerado, la interpolación lineal subestimaría gravemente los requerimientos de insumos.
 
+### Interpretación de resultados
+La pendiente negativa general de las tasas refleja la **transición demográfica avanzada** de Argentina. El suavizado no "inventa" datos, sino que permite que esta realidad sea legible mensualmente sin el ruido de los cierres de ejercicio.
+### Trade-offs: Simplicidad vs. Precisión
+* **La ventaja de lo simple:** El método lineal es más fácil de auditar y explicar. Dada la inmaterialidad de la diferencia absoluta, su uso es perfectamente válido para reportes o calculo de métricas.
+* **El rigor del Data Science:** El método exponencial suavizado es preferible por ser mas solido y proyecciones de largo plazo, donde el crecimiento compuesto es el motor subyacente.
+### Advertencia Metodológica: Escenarios Significativos
+Es crucial notar que esta convergencia de métodos se da aquí por la baja volatilidad demográfica. En otros escenarios, la elección sería crítica:
+1.  **Economía:** En contextos de alta inflación, la diferencia entre una curva lineal y una exponencial de precios sería masiva.
+2.  **Producción:** En procesos biológicos o industriales de escala rápida, la interpolación lineal subestimaría gravemente los recursos necesarios.
+  
 ![Análisis de Impacto Metodológico](impacto_suavizado.png)
-*Figura 5: Análisis de impacto final. Se confirma que el suavizado garantiza la convergencia en los puntos de anclaje, manteniendo la coherencia con los datos oficiales.*
+
+*Figura 7: El gráfico de impacto final demuestra que el suavizado garantiza la coherencia con los datos oficiales de anclaje (Julio).*
