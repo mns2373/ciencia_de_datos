@@ -462,7 +462,7 @@ Es importante mencionar que la convergencia de métodos hallada en el presente c
 
 ### Validación conceptual
 
-![Impacto metodológico](impacto_suavizado.png)
+![Impacto metodológico](impacto_suavizado2.png)
 
 Figura 8: Validación de convergencia. El gráfico final asegura que, independientemente del camino tomado, todos los métodos respetan el anclaje oficial, garantizando la integridad de la serie histórica.
 
@@ -478,35 +478,7 @@ Esto garantiza la consistencia de la serie sin alterar los valores de referencia
 El trabajo demuestra que:
 
 - Es posible construir series mensuales consistentes a partir de datos anuales  
-- El suavizado mejora la calidad analítica de las series  
+- El suavizado mejora la calidad analítica al reducir artefactos metodológicos  
 - La elección del método debe evaluarse en función de la materialidad del error  
 
-En este caso particular, la baja variabilidad demográfica permite privilegiar la simplicidad sin pérdida de validez analítica.
-
-
-
-
-
-
-
-
-
-
----
-## 9. Discusión: Criterios de Aplicación
-
-La evidencia sugiere que, en lo que respecta al análisis de la población argentina (1960-2025), la elección del método es **inmaterial en cuanto al volumen, pero crítica en cuanto a la forma**.
-
-### 9.1. Simplicidad vs. Rigor Técnico
-Como resultado de esta investigación, surge un compromiso entre la facilidad de auditoría y la precisión científica:
-* **Defensa de la Simplicidad:** Dada la baja volatilidad demográfica, la interpolación lineal es una opción válida por su facilidad de explicación en reportes administrativos. Al ser la diferencia cuantitativa exigua, lo "simple" cumple con el objetivo de no inducir al error.
-* **El Valor del Rigor:** Para el analista de datos, el método exponencial suavizado sigue siendo la recomendación técnica. Provee una serie más "limpia" para modelos de regresión o cálculos de tasas e índices, evitando ruidos artificiales en la derivada de la serie.
-
-### 9.2. Límites de la Inmaterialidad
-Es vital advertir que la convergencia de métodos hallada aquí es hija de la estabilidad de la variable analizada. En otros dominios, este análisis de materialidad arrojaría resultados opuestos:
-1. **Contextos Económicos:** En series de precios con alta inflación, el error entre un modelo lineal y uno exponencial sería masivo y afectaría directamente la indexación de contratos o presupuestos.
-2. **Escalamiento Biológico/Industrial:** En procesos de crecimiento acelerado, ignorar la naturaleza exponencial llevaría a una subestimación crítica de recursos.
-
-![Análisis de Impacto Final](impacto_suavizado.png)  
-
-*Figura 8: Validación de convergencia. El gráfico final asegura que, independientemente del camino tomado, todos los métodos respetan el anclaje oficial, garantizando la integridad de la serie histórica.*
+En este caso particular, la baja variabilidad demográfica y la reducida magnitud de las diferencias permiten privilegiar enfoques más simples sin pérdida de validez analítica.
