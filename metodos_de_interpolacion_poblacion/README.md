@@ -1,4 +1,4 @@
-# Desincronización de Frecuencias en Series Temporales: Comparación de Métodos de Interpolación Mensual a partir de Datos Anuales
+# Desincronización de Frecuencias en Series Temporales: Análisis de Métodos de Desagregación Temporal de Series Anuales a Frecuencia Mensual
 
 **Autor:** [Martin Nicolas Serafini](https://www.linkedin.com/in/martin-nicolas-serafini-05224923b/)
 
