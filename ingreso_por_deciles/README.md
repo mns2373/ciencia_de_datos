@@ -1,15 +1,16 @@
-# Evolución del Poder de Compra en Argentina (2003-2026): Una Perspectiva por Deciles frente al Sesgo del RIPTE
+# ¿Cuánto ganamos realmente? Dinámica de ingresos y poder de compra en Argentina: un estudio sobre la heterogeneidad del ingreso y poder adquisitivo (2003-2025)
 
-**Autor:** [Tu Nombre]  
-**Área:** Data Science & Economía Aplicada  
-**Repositorio:** [Enlace a tu GitHub]
+**Autor:** [Martín Nicolás Serafini](https://www.linkedin.com/in/martin-nicolas-serafini-05224923b/)
+
 
 ---
 
-## Resumen (Abstract)
+## Abstract
 
-Este trabajo analiza la dinámica de los ingresos en Argentina durante el periodo 2003-2026, contrastando la capacidad analítica de la distribución decílica frente a indicadores promedio tradicionales como el RIPTE (Remuneración Imponible Promedio de los Trabajadores Estables). Se argumenta que, en contextos de alta informalidad laboral y volatilidad macroeconómica, el uso de promedios generales genera un "sesgo de supervivencia" que invisibiliza la degradación del poder de compra en los estratos más vulnerables. 
+Este trabajo presenta un análisis longitudinal de la distribución del ingreso en Argentina entre 2003 y 2025, utilizando la **apertura por deciles** como unidad fundamental de observación. El objetivo central es demostrar por qué la segmentación decílica es superior a los indicadores de tendencia central (como el RIPTE) para capturar la heterogeneidad del mercado laboral y la disparidad en la capacidad de consumo de la población.
 
-A través del procesamiento de datos de la Encuesta Permanente de Hogares (EPH) y la integración de modelos de imputación estadística, se demuestra cómo la apertura por deciles permite capturar la heterogeneidad de la pirámide social, identificando el impacto dispar de la inflación según el nivel de consumo. El estudio concluye que el análisis basado en la Mediana ($D_5$) y la brecha inter-decílica constituye una herramienta metodológicamente superior para el diagnóstico de la realidad económica y el diseño de estrategias comerciales en mercados de consumo masivo, superando las limitaciones intrínsecas de las métricas administrativas de la seguridad social.
+La metodología emplea técnicas de **deflación de series temporales** para normalizar los valores nominales, permitiendo una comparación técnica del poder de compra en distintos ciclos económicos. Asimismo, se evalúa la evolución de la canasta de consumo según el estrato socioeconómico, contrastando los momentos de mayor y menor bienestar relativo. Por último, se examina la robustez de la métrica frente a eventos disruptivos, tales como la intervención institucional del INDEC (2007-2015), los sesgos operativos derivados del ASPO y la implementación de nuevos algoritmos de imputación de ingresos (Hot-Deck) en 2024, analizando su impacto en la integridad de la serie histórica.
+
+**Palabras clave:** Apertura por deciles, Ingreso Real, EPH, RIPTE, Canasta Basica, Canasta dew Indigencia, IPC, Deflación de series, Poder de compra.
 
 ---
